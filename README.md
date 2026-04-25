@@ -11,21 +11,22 @@ forming a knowledge graph that reveals relationships across thematic groupings.
 
 ### Core Objects
 
-**Entry** — the atomic unit of knowledge
-- `id` — Long
-- `title` — String
-- `body` — String
-- `type` — EntryType enum (NOTE, CONCEPT, QUOTE, DIARY, DEFINITION)
+**LoomObject** — abstract base for all Loom domain objects
+- `id` — String (object-prefixed UUID)
 - `createdAt` — timestamp
 - `updatedAt` — timestamp
-- `spoolIds` — List\<Long\> (nullable, reserved for future Spool implementation)
+- `visibility` — `Visibility`enum (PUBLIC, PRIVATE, UNLISTED)
+
+**LoomEntry** — the atomic unit of knowledge; e.g. note, concept, quote, or any discrete thought.
+- `title` — String
+- `body` — String
+- `entryType` — String (user-defined e.g. NOTE, CONCEPT, QUOTE, DIARY, DEFINITION)
+- `spoolIds` — List\<String\> (nullable, reserved for future Spool implementation)
 
 **Strand** — a typed relationship between two Entries
-- `id` — Long
-- `sourceEntryId` — Long
-- `targetEntryId` — Long
+- `sourceEntryId` — String
+- `targetEntryId` — String
 - `type` — RelationshipType enum (RELATES_TO, ORIGINATED_FROM, SEE_ALSO, IS_PART_OF)
-- `createdAt` — timestamp
 - Extends: `Relationship` (abstract base class — future)
 
 **Relationship** *(abstract — future)*
