@@ -50,6 +50,20 @@ Map HTTP requests to Java methods.
 | `@RequestParam` | Extract query parameter from URL | `req.query.page` |
 
 ---
+## Database Annotations
+Using JPA/Jakarta
+| Annotation | Level | What it does |
+|---|---|---|
+| `@MappedSuperclass` | Class | Base class fields included in subclass tables, no own table
+|`@Entity` | Class | Create table for this class |
+|`@Column(...)` | Field | Customize column - nullable, name, length, data type to save |
+|`@Table(name = "...")` | Class | Custom table name |
+|`@Id` | Field | Primary key |
+|`@GeneratedValue` | Field | Auto-generate primary key |
+|`@Enumerated(EnumType.STRING)` | Field | Store enum as str not int |
+|`@ElementCollection` | Field | Store collection of simple values |
+|`@PrePersist` | Method | Runs before first save (INSERT) |
+|`@PreUpdate` | Method | Runs before every UPDATE |
 
 ## Quick Code Reference
 
