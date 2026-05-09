@@ -4,7 +4,9 @@ import com.example.entry_service.core.LoomObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -14,6 +16,8 @@ import lombok.experimental.SuperBuilder;
 @Entity                  // JPA: model/data structure, creates table
 @Table(name = "loom_entries") // JPA: custom table name
 @SuperBuilder            // Lombok: enables builder pattern for class hierarchies
+@NoArgsConstructor       // Lombok: (required for JPA entity instantiation)
+@AllArgsConstructor      // Lombok: fix NoArgsConstructor/Superbuilder conflict
 @Getter                  // Lombok: generates for all non-static fields
 @Setter
 public class LoomEntry extends LoomObject {
@@ -23,6 +27,6 @@ public class LoomEntry extends LoomObject {
   private String entryType; // user-defined e.g. NOTE, CONCEPT, QUOTE, DIARY, DEFINITION
 
   @Override
-  protected String getIdPrefix() { return "entry_"; }
+  protected String getIdPrefix() { return "entry"; }
   
 }
