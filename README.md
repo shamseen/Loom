@@ -29,9 +29,11 @@ The engine is a reusable library — developers can build their own adapters on 
 **Strand** — a typed relationship between two Entries
 - `sourceEntryId` — String
 - `targetEntryId` — String
-- `type` — `StrandType` enum (RELATES_TO, ORIGINATED_FROM, SEE_ALSO, IS_PART_OF)
-- `isBidirectional` — boolean indicating relationship as uni-/bidirectional
+- `strandType` — StrandType enum (CONTRADICTS, DEFINES, EVIDENCE_OF, EVOLVED_FROM, PART_OF, RELATES_TO, TANGENT)
 - Extends: `Relationship` (abstract base class — future)
+- Note: directionality implied by sourceEntryId → targetEntryId
+- Note: `isBidirectional` field deferred — add after MVP when real usage data informs which types need it
+- Note: user-defined Strand types deferred — ship with hardcoded preliminary types for MVP
 
 **Relationship** *(abstract — future)*
 - Abstract base class for all relational objects
@@ -89,7 +91,8 @@ Loom/
 
 **`loom-engine` (library — not deployable):**
 - `LoomObject` — abstract base class
-- `Visibility`, `RelationshipType`, `Direction` — enums
+- `Visibility` — enum (in core/)
+- `StrandType` — enum (in strand/)
 - `LoomEntry`, `Strand` — domain models
 - `Spool` — domain model (when implemented)
 - All service classes (business logic)
@@ -171,9 +174,12 @@ Loom/
 - [x] JPA and H2
 - [x] Lombok
 - [x] Full CRUD REST API (practice project)
-- [ ] Set up Maven multi-module structure (parent POM, loom-engine, loom-api)
-- [ ] Build loom-engine — LoomObject, LoomEntry, Strand, services, repositories
-- [ ] Wire up JPA in loom-engine
+- [x] Set up Maven multi-module structure (parent POM, loom-engine, loom-api)
+- [x] Domain models — LoomObject, LoomEntry, Strand (plain Java, no annotations)
+- [ ] Add Lombok annotations to domain models
+- [ ] Add JPA annotations to domain models
+- [ ] Build repositories — EntryRepository, StrandRepository
+- [ ] Build services — EntryService, StrandService
 - [ ] Build loom-api — controllers only, depends on loom-engine
 - [ ] Switch H2 to PostgreSQL (Docker container)
 - [ ] Full CRUD for entries and strands working end-to-end
@@ -246,7 +252,9 @@ Loom/
 | Update behavior | Upsert | Simpler for now, 404 to be added later |
 | Entry body field | body (not definition) | More generic — not all entries are definitional |
 | Entry type field | String (user-defined) | Fixed enum too rigid for personal knowledge domain |
-| Strand direction | Direction enum (UNIDIRECTIONAL, BIDIRECTIONAL) | Some relationships are hierarchical, others mutual |
+| Strand directionality | Implied by sourceEntryId → targetEntryId, no explicit field for MVP | isBidirectional deferred until real usage data informs which types need it |
+| Strand types | Hardcoded enum for MVP, user-defined extensibility deferred | Premature flexibility before core is stable is a trap |
+| StrandType values | CONTRADICTS, DEFINES, EVIDENCE_OF, EVOLVED_FROM, PART_OF, RELATES_TO, TANGENT | Covers main relationship categories without over-engineering |
 | Strand immutability | Delete and recreate to change | Relationships should be intentional; no partial updates |
 | Spool implementation | Deferred | Adds complexity without MVP value |
 | Knot implementation | Deferred | Need real data before designing hyperedge model |
@@ -261,3 +269,9 @@ Loom/
 - Bidirectional Strands — store once and query both directions, or store twice?
 - Graph visualization library — D3.js, Cytoscape.js, or React Flow?
 - Should loom-web live in this repo or a separate repo as the project grows?
+
+## Future Strand Improvements (post-MVP)
+- `isBidirectional` field — add per StrandType once real usage data informs which types need it
+- User-defined Strand types — name, optional description, directionality flag
+- Strand type categories — hierarchical, associative, definitional, tension, evidential
+- Strand type description field — context for user-defined types that may lose meaning over time
